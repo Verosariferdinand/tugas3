@@ -17,7 +17,7 @@ This project demonstrates clean architecture, model separation, and UI component
 ⚙️ Installation
 1. Clone the repositor
   ```
-  git clone https://github.com/yourusername/flutter-university-app.git
+  git clone https://github.com/Verosariferdinand/tugas3.git
   ```
 2. Navigate to project directory
   ```
