@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/faculty_model.dart';
 import '../models/news_item_model.dart';
-import '../models/program_studi_model.dart'; // <--- IMPORT PRODI MODEL
+import '../models/program_studi_model.dart';
 import '../utils/app_colors.dart';
 
 class FacultyDetailScreen extends StatelessWidget {
@@ -15,7 +15,6 @@ class FacultyDetailScreen extends StatelessWidget {
     required this.faculty,
   });
 
-  // Fungsi untuk membuka URL (sudah ada)
   Future<void> _launchURL(String urlString) async {
     final Uri url = Uri.parse(urlString);
     if (!await launchUrl(url)) {
@@ -23,175 +22,522 @@ class FacultyDetailScreen extends StatelessWidget {
     }
   }
 
-  // --- TAMBAHKAN FUNGSI BARU INI ---
-  // Fungsi untuk menampilkan Bottom Sheet daftar prodi
   void _showProdiSheet(BuildContext context, Faculty faculty) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Agar tinggi sheet bisa dinamis
-      // Membuat sudut atas membulat
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          // Batasi tinggi sheet agar tidak full screen
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.6,
+            maxHeight: MediaQuery.of(context).size.height * 0.7,
           ),
-          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF1E3A8A).withOpacity(0.2),
+                blurRadius: 20,
+                offset: const Offset(0, -5),
+              ),
+            ],
+          ),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Tinggi sheet sesuai konten
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // Handle (garis abu-abu di atas)
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+              // Handle
+              Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 8),
+                width: 50,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE2E8F0),
+                  borderRadius: BorderRadius.circular(3),
                 ),
               ),
-              const SizedBox(height: 16),
 
-              // Judul Sheet
-              Text(
-                'Program Studi',
-                style: Theme.of(context).textTheme.headlineSmall,
+              // Header dengan gradient
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF3B82F6).withOpacity(0.1),
+                      Colors.white,
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFF1E3A8A),
+                            Color(0xFF3B82F6),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF3B82F6).withOpacity(0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.school,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Program Studi',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF1E3A8A),
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFBBF24).withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: const Color(0xFFFBBF24).withOpacity(0.3),
+                        ),
+                      ),
+                      child: Text(
+                        faculty.name,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xFF92400E),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                faculty.name,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: Colors.grey[600]),
-              ),
-              const Divider(height: 24),
 
               // Daftar Prodi
               Flexible(
                 child: ListView.builder(
-                  shrinkWrap: true, // Penting di dalam Column
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  shrinkWrap: true,
                   itemCount: faculty.programs.length,
                   itemBuilder: (context, index) {
                     final ProgramStudi program = faculty.programs[index];
-                    return ListTile(
-                      leading:
-                          const Icon(Icons.school_outlined, color: secondaryBlue),
-                      title: Text(program.name),
-                      onTap: () {
-                        // Nanti Anda bisa buat tiap prodi punya URL sendiri
-                        Navigator.pop(context); // Tutup sheet saat di-klik
-                      },
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: const Color(0xFF3B82F6).withOpacity(0.1),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF1E3A8A).withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        leading: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                const Color(0xFF3B82F6).withOpacity(0.2),
+                                const Color(0xFF1E3A8A).withOpacity(0.1),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.school_outlined,
+                            color: Color(0xFF1E3A8A),
+                            size: 24,
+                          ),
+                        ),
+                        title: Text(
+                          program.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF1E3A8A),
+                            fontSize: 15,
+                          ),
+                        ),
+                        trailing: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF3B82F6).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 14,
+                            color: Color(0xFF3B82F6),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
                     );
                   },
                 ),
               ),
+              const SizedBox(height: 16),
             ],
           ),
         );
       },
     );
   }
-  // --- BATAS FUNGSI BARU ---
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         title: Text(faculty.name),
+        backgroundColor: Colors.white,
+        foregroundColor: const Color(0xFF1E3A8A),
+        elevation: 0,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header (Image.asset)
-            Image.asset(
-              faculty.imageUrl,
-              width: double.infinity,
-              fit: BoxFit.fitWidth,
+            // Header Image dengan shadow
+            Container(
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF1E3A8A).withOpacity(0.2),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  faculty.imageUrl,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
 
-            // Deskripsi
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            // Deskripsi Card
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF1E3A8A).withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+                border: Border.all(
+                  color: const Color(0xFF3B82F6).withOpacity(0.1),
+                ),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ... (Text 'Tentang Fakultas' dan longDescription) ...
-                  Text(
-                    'Tentang Fakultas',
-                    style: Theme.of(context).textTheme.headlineSmall,
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF1E3A8A),
+                              Color(0xFF3B82F6),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF3B82F6).withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.info_outline,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Tentang Fakultas',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF1E3A8A),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
+                  Container(
+                    height: 1,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF3B82F6).withOpacity(0.1),
+                          const Color(0xFF3B82F6).withOpacity(0.3),
+                          const Color(0xFF3B82F6).withOpacity(0.1),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   Text(
                     faculty.longDescription,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.5),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: const Color(0xFF475569),
+                      height: 1.7,
+                      letterSpacing: 0.2,
+                    ),
                   ),
-                  const SizedBox(height: 24),
-                  
-                  // ... (Text 'Berita & Agenda' dan ListView.builder) ...
-                  Text(
-                    'Berita & Agenda',
-                    style: Theme.of(context).textTheme.headlineSmall,
+                ],
+              ),
+            ),
+
+            // Berita & Agenda Card
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF1E3A8A).withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
                   ),
-                  const SizedBox(height: 12),
+                ],
+                border: Border.all(
+                  color: const Color(0xFF3B82F6).withOpacity(0.1),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF1E3A8A),
+                              Color(0xFF3B82F6),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF3B82F6).withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.newspaper,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Berita & Agenda',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF1E3A8A),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    height: 1,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF3B82F6).withOpacity(0.1),
+                          const Color(0xFF3B82F6).withOpacity(0.3),
+                          const Color(0xFF3B82F6).withOpacity(0.1),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   ListView.builder(
                     itemCount: faculty.newsItems.length,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       final NewsItem newsItem = faculty.newsItems[index];
-                      return Column(
-                        children: [
-                          ListTile(
-                            leading: Icon(newsItem.icon, color: secondaryBlue),
-                            title: Text(newsItem.title),
-                            subtitle: Text(newsItem.subtitle),
-                            trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                            onTap: () {
-                              _launchURL(newsItem.url);
-                            },
+                      return Container(
+                        margin: const EdgeInsets.only(top: 8, bottom: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF3B82F6).withOpacity(0.03),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF3B82F6).withOpacity(0.1),
                           ),
-                          const Divider(),
-                        ],
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
+                          leading: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF3B82F6).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              newsItem.icon,
+                              color: const Color(0xFF3B82F6),
+                              size: 20,
+                            ),
+                          ),
+                          title: Text(
+                            newsItem.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1E3A8A),
+                              fontSize: 14,
+                            ),
+                          ),
+                          subtitle: Container(
+                            margin: const EdgeInsets.only(top: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFBBF24).withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              newsItem.subtitle,
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF92400E),
+                              ),
+                            ),
+                          ),
+                          trailing: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF3B82F6).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 12,
+                              color: Color(0xFF3B82F6),
+                            ),
+                          ),
+                          onTap: () {
+                            _launchURL(newsItem.url);
+                          },
+                        ),
                       );
                     },
                   ),
-
-                  const SizedBox(height: 30),
-
-                  // --- UBAH TOMBOL DI SINI ---
-                  Center(
-                    child: ElevatedButton.icon(
-                      // 1. Ganti Ikon
-                      icon: const Icon(Icons.school),
-                      // 2. Ganti Label
-                      label: const Text('Lihat Program Studi'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: accentYellow,
-                        foregroundColor: darkText,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        textStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      // 3. Ganti onPressed
-                      onPressed: () {
-                        // Panggil fungsi bottom sheet
-                        _showProdiSheet(context, faculty);
-                      },
-                    ),
-                  )
-                  // --- BATAS PERUBAHAN TOMBOL ---
                 ],
               ),
             ),
+
+            const SizedBox(height: 16),
+
+            // Tombol Program Studi
+            Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFFBBF24).withOpacity(0.4),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.school, size: 24),
+                  label: const Text(
+                    'Lihat Program Studi',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFBBF24),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 18,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                  ),
+                  onPressed: () {
+                    _showProdiSheet(context, faculty);
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),

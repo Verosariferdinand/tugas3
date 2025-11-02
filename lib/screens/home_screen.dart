@@ -1,9 +1,7 @@
-// lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import '../models/faculty_model.dart';
 import '../models/news_item_model.dart';
-import '../models/program_studi_model.dart'; // <--- 1. TAMBAHKAN IMPORT INI
+import '../models/program_studi_model.dart'; 
 import '../utils/app_colors.dart';
 import '../widgets/faculty_card.dart';
 
@@ -39,7 +37,6 @@ class HomeScreen extends StatelessWidget {
           url: 'https://fst.umsida.ac.id/tim-imei-umsida-kembali-menorehkan-raih-juara-2/',
         ),
       ],
-      // --- 2. TAMBAHKAN DAFTAR PRODI ---
       programs: const [
         ProgramStudi(name: 'Teknik Industri'),
         ProgramStudi(name: 'Teknik Mesin'),
@@ -77,7 +74,6 @@ class HomeScreen extends StatelessWidget {
           url: 'https://fbhis.umsida.ac.id/dosen-fbhis-umsida-kupas-peran-auditor-di-usim/',
         ),
       ],
-      // --- 2. TAMBAHKAN DAFTAR PRODI ---
       programs: const [
         ProgramStudi(name: 'Manajemen'),
         ProgramStudi(name: 'Akuntansi'),
@@ -114,7 +110,6 @@ class HomeScreen extends StatelessWidget {
           url: 'https://fpip.umsida.ac.id/kolaborasi-keluarga-dan-transformasi-pendidikan/',
         ),
       ],
-      // --- 2. TAMBAHKAN DAFTAR PRODI ---
       programs: const [
         ProgramStudi(name: 'Psikologi'),
         ProgramStudi(name: 'Pendidikan Guru PAUD (PG-PAUD)'),
@@ -151,7 +146,6 @@ class HomeScreen extends StatelessWidget {
           url: 'https://fai.umsida.ac.id/sabar-vol-5-menjalin-ukhuwah-dan-membangun-ikatan/',
         ),
       ],
-      // --- 2. TAMBAHKAN DAFTAR PRODI ---
       programs: const [
         ProgramStudi(name: 'Pendidikan Agama Islam (PAI)'),
         ProgramStudi(name: 'Pendidikan Bahasa Arab (PBA)'),
@@ -181,7 +175,6 @@ class HomeScreen extends StatelessWidget {
           url: 'https://fkg.umsida.ac.id/menjaga-kesehatan-mulut-di-era-gaya-hidup-modern/',
         ),
       ],
-      // --- 2. TAMBAHKAN DAFTAR PRODI ---
       programs: const [
         ProgramStudi(name: 'Sarjana Kedokteran Gigi (S1)'),
         ProgramStudi(name: 'Profesi Dokter Gigi'),
@@ -195,17 +188,24 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Portal UMSIDA'),
         centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: const Color(0xFF1E3A8A),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _buildHeroImage(context),
             _buildUniversityInfoCard(context),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 'Daftar Fakultas',
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: const Color(0xFF1E3A8A),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
             ListView.builder(
@@ -224,45 +224,290 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildHeroImage(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF1E3A8A).withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            'assets/images/containerfoto.png', // Ganti dengan path gambar Anda
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              // Placeholder jika gambar tidak ditemukan
+              return Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF1E3A8A),
+                      const Color(0xFF3B82F6),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.school,
+                        size: 60,
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'UMSIDA',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Universitas Muhammadiyah Sidoarjo',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildUniversityInfoCard(BuildContext context) {
-    // 3. PERBAIKI BORDER RADIUS (lebih rapi)
-    return Card(
-      elevation: 3,
-      margin: const EdgeInsets.all(16),
-      shape: const RoundedRectangleBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(12)),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: [
+            Colors.white,
+            const Color(0xFF3B82F6).withOpacity(0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF1E3A8A).withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+            spreadRadius: 0,
+          ),
+        ],
       ),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-          gradient: LinearGradient(
-            colors: [primaryBlue.withOpacity(0.1), Colors.white],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: const Color(0xFF3B82F6).withOpacity(0.1),
+            width: 1,
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Selamat Datang di UMSIDA',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: primaryBlue,
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF1E3A8A),
+                          const Color(0xFF3B82F6),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF3B82F6).withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
+                    child: const Icon(
+                      Icons.school,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Selamat Datang di',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: const Color(0xFF64748B),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'UMSIDA',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF1E3A8A),
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFBBF24),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFFBBF24).withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.star,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Unggul',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
+              Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF3B82F6).withOpacity(0.1),
+                      const Color(0xFF3B82F6).withOpacity(0.3),
+                      const Color(0xFF3B82F6).withOpacity(0.1),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
               Text(
                 'UMSIDA adalah Universitas Muhammadiyah Sidoarjo, sebuah perguruan tinggi swasta di Jawa Timur yang berdiri tahun 1984 dengan akreditasi "Unggul". Universitas ini memiliki 5 fakultas dengan 27 program studi dan berfokus pada pengembangan sumber daya manusia, ilmu pengetahuan, dan teknologi yang berbasis nilai Islam.',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: darkText.withOpacity(0.8),
-                      height: 1.5,
-                    ),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: const Color(0xFF475569),
+                  height: 1.7,
+                  letterSpacing: 0.2,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  _buildInfoChip(
+                    icon: Icons.calendar_today,
+                    label: 'Est. 1984',
+                    color: const Color(0xFF3B82F6),
+                  ),
+                  const SizedBox(width: 12),
+                  _buildInfoChip(
+                    icon: Icons.apartment,
+                    label: '5 Fakultas',
+                    color: const Color(0xFF1E3A8A),
+                  ),
+                  const SizedBox(width: 12),
+                  _buildInfoChip(
+                    icon: Icons.menu_book,
+                    label: '27 Prodi',
+                    color: const Color(0xFFFBBF24),
+                  ),
+                ],
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoChip({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: color.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 16,
+            color: color,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }
