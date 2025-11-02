@@ -1,16 +1,42 @@
-# tugas3
+🎓 Flutter University App
 
-A new Flutter project.
+A Flutter-based mobile application designed to display university-related information such as faculties, programs, and news.
+This project demonstrates clean architecture, model separation, and UI componentization in Flutter.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+📱 Features <br>
+🏫 Display list of faculties with details <br>
+📚 Show study programs (program studi) per faculty <br>
+📰 News section for campus updates <br>
+🔍 Navigation between Home, Faculty Detail, and News <br>
+📦 Well-structured model classes (Faculty, ProgramStudi, NewsItem) <br>
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+⚙️ Installation
+1. Clone the repositor
+  ```
+  git clone https://github.com/yourusername/flutter-university-app.git
+  ```
+2. Navigate to project directory
+  ```
+  cd flutter-university-app
+  ```
+3. Get dependencies
+  ```
+  flutter pub get
+  ```
+4. Run the app
+  ```
+  flutter run
+  ```
+---
+🧠 Tech Stack
+<ul>
+<li>Framework: Flutter</li>
+<li>Language: Dart</li>
+<li>State Management: Basic StatefulWidget / Provider (if added later)</li>
+<li>Architecture: Model–View–Widget (MVW)</li>
+</ul>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
