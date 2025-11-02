@@ -21,7 +21,7 @@ This project demonstrates clean architecture, model separation, and UI component
   ```
 2. Navigate to project directory
   ```
-  cd flutter-university-app
+  cd tugas3
   ```
 3. Get dependencies
   ```
